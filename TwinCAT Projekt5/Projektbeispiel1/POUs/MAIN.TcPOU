@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.4">
+  <POU Name="MAIN" Id="{ae65c23e-b8e6-408d-9d93-fb7e9005409a}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	//bInput1 AT %I*: BOOL;
+	//bOutput2 AT %Q*:BOOL;
+	bBackhofengedruckt :BOOL;
+	Sfertig AT %Q* :BOOL;
+	fbtimer AT %I* :TP;
+	fbtrigger :R_TRIG;
+	Anzahlpizza:DINT;
+	testBit:BOOL;
+Temperatur AT %I*: INT;
+angezeigterWert:LREAL;
+angezeigterWert1:INT;
+angezeigterWert2:REAL;
+Temperatureanzeige:STRING;
+
+
+
+
+
+	
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//bOutput2:=NOT bInput1;
+angezeigterWert:=INT_TO_REAL(Temperatur)/100;
+//angezeigterWert1:=REAL_TO_INT(angezeigterWert*100);
+//angezeigterWert2:=INT_TO_REAL(angezeigterWert1/100);
+temperatureanzeige:=LREAL_TO_FMTSTR(angezeigterWert, 2, TRUE);
+	
+	
+fbtimer(IN:=bBackhofengedruckt, PT:=T#5S);
+	Sfertig:=fbtimer.Q;
+fbtrigger(clk:=Sfertig);
+IF fbtrigger.Q THEN
+	Anzahlpizza:= Anzahlpizza+1;
+	//angezeigterWert:=INT_TO_REAL(Temperatur)/100;
+	//angezeigterWert:= temperatur/100;
+	
+END_IF
+
+pou();]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="134" Count="1" />
+      <LineId Id="133" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="112" Count="0" />
+      <LineId Id="79" Count="1" />
+      <LineId Id="49" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="63" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
